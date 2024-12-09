@@ -59,7 +59,7 @@ void TestApp::start() {
     // generate the models
     model.load("ball", mesh.GenSphere("", 1, 8, 8));
     model.load("rect", mesh.GenPlane("" , 4, 2, 2, 2));
-    model.load("cube", mesh.GenCube( "cube", 1, 1, 1));
+    model.load("cube", mesh.GenCube( "", 1, 1, 1));
 
     material.GenMaterialDefault("defmat");
     material.set_texture("defmat", MATERIAL_MAP_ALBEDO, texture.get("ea"));
