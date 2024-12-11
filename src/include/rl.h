@@ -1,6 +1,10 @@
 #ifndef RL_H
 #define RL_H
 
+#ifndef ASSET_FILES
+#define ASSET_FILES std::unordered_map<std::string, const char *>
+#endif
+
 #include "rltexture.h"
 #include "rlsound.h"
 #include "rlmusic.h"
@@ -13,10 +17,6 @@
 #include "rlmodelanimation.h"
 #include "rlcamera.h"
 #include "rlgui.h"
-
-#ifndef DEFAULT_FILES
-#define DEFAULT_FILES std::unordered_map<std::string, const char *>
-#endif
 
 class App {
 public:

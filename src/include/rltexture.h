@@ -6,10 +6,6 @@
 
 #include "raylib.h"
 
-#ifndef DEFAULT_FILES
-#define DEFAULT_FILES std::unordered_map<std::string, const char *>
-#endif
-
 class rlTexture {
     public:
     rlTexture() {}

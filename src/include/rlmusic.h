@@ -6,8 +6,8 @@
 
 #include "raylib.h"
 
-#ifndef DEFAULT_FILES
-#define DEFAULT_FILES std::unordered_map<std::string, const char *>
+#ifndef ASSET_FILES
+#define ASSET_FILES std::unordered_map<std::string, const char *>
 #endif
 
 class rlMusic {
@@ -15,7 +15,7 @@ class rlMusic {
     rlMusic() {}
     ~rlMusic() { unload(); }
 
-    bool load(DEFAULT_FILES files) {
+    bool load(ASSET_FILES files) {
         for (auto it : files) {
             bool success = load(it.first, it.second);
             if (!success) return false;

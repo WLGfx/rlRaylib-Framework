@@ -1,10 +1,7 @@
 #ifndef TESTAPP_H
 #define TESTAPP_H
 
-#include "../include/rl.h"
-
-#include "../include/gui_dia_confirm.h"
-#include "../include/gui_1280x800T.h"
+#include "include/rl.h"
 
 class TestApp {
     public:
@@ -27,18 +24,20 @@ class TestApp {
         rlMaterial material; // Material handler
         rlModelAnimation animation; // Animation handler
 
-        DEFAULT_FILES default_textures = {
+        Vector2 window_size = { 0, 0 };
+
+        ASSET_FILES default_textures = {
             { "ea", "./assets/easkit.png" }
         };
 
-        DEFAULT_FILES default_sounds = {
+        ASSET_FILES default_sounds = {
             { "coin", "./assets/resources/coin.wav" },
             { "zap", "./assets/resources/sound.wav" },
             { "target", "./assets/resources/target.ogg" },
             { "weird", "./assets/resources/weird.wav" }
         };
 
-        DEFAULT_FILES default_music = {
+        ASSET_FILES default_music = {
             { "intro", "./assets/timebug.mod" },
             { "country", "./assets/resources/country.mp3" },
             { "mini", "./assets/resources/mini1111.xm" }
@@ -66,20 +65,6 @@ class TestApp {
         float ea_angle = 60;
 
         rlGui gui;
-        rlButton button1 = {
-            { 100, 100 },
-            { 100, 30 },
-            "Click Me"
-        };
-
-        Rectangle button2_bounds = { 200, 100, 100, 30 };
-        Rectangle textbox_bounds = { 300, 100, 200, 30 };
-        char textbox_text[20] = { '\0' };
-        int textbox_length = 20;
-        bool textbox_editmode = true;
-
-        GuiDiaConfirmState state = GuiDiaConfirmState();
-        Gui1280x800TState screen = Gui1280x800TState();
 };
 
 #endif

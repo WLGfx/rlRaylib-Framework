@@ -1,14 +1,8 @@
+#include "include/rlgui.h"
 #include <raylib.h>
+
 #define RAYGUI_IMPLEMENTATION
-#include "../include/raygui.h"
-
-#define GUI_DIA_CONFIRM_IMPLEMENTATION
-#include "../include/gui_dia_confirm.h"
-#undef GUI_DIA_CONFIRM_IMPLEMENTATION
-
-#define GUI_1280X800T_IMPLEMENTATION
-#include "../include/gui_1280x800T.h"
-#undef GUI_1280X800T_IMPLEMENTATION
+#include "include/raygui.h"
 
 #include "TestApp.h"
 
@@ -59,13 +53,14 @@ void TestApp::start() {
     // generate the models
     model.load("ball", mesh.GenSphere("", 1, 8, 8));
     model.load("rect", mesh.GenPlane("" , 4, 2, 2, 2));
-    model.load("cube", mesh.GenCube( "", 1, 1, 1));
+    model.load("cube", mesh.GenCube("", 1, 1, 1));
 
+    // generate a checked material
     material.GenMaterialDefault("defmat");
     material.set_texture("defmat", MATERIAL_MAP_ALBEDO, texture.get("ea"));
     image.gen_checked("check", 8, 8, 4, 4, DARKGRAY, LIGHTGRAY);
     texture.load("check", image.get("check"));
-    image.unload( "check" );
+    image.unload( "check" ); // no need may as well clean it now
 
     material.GenMaterialDefault("defmat2");
     material.set_texture( "defmat2", MATERIAL_MAP_ALBEDO, texture.get("check"));
@@ -75,12 +70,17 @@ void TestApp::start() {
 
     sound.volume( "coin", 0.1f );
 
-    // raygui
+    // now init my gui
+    window_size = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+
     GuiLoadStyle("./assets/dark.rgs");
-
-    state = InitGuiDiaConfirm(); // fullscreen HUD layout
-    screen = InitGui1280x800T(); // testing a message box
-
+    gui.add("button", new rlButton(10, 10, 200, 50, "Just Click!"));
+    gui.add("color", new rlColorPicker(10, 70, 200, 200, "Pick a color", GREEN));
+    gui.add("progress", new rlProgressBar(10, 270, 200, 40, "Left", "Right", 0.5f, 0, 1));
+    //rlSliderBar(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
+    gui.add("slider", new rlSliderBar(10, 320, 200, 40, "Left", "Right", 50.0f, 0, 100));
+    //rlSlider(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
+    gui.add("slider2", new rlSlider(10, 370, 200, 40, "Left", "Right", 50.0f, 0, 100));
     // ah feck it, let's get started
     music.play("intro");
 
@@ -128,22 +128,5 @@ void TestApp::draw() {
     camera.end();
 
     // 2D and gui
-
-    gui.draw_button(button1, true, true);
-    int action_button = GuiButton(button2_bounds, "Button 2");
-    int action_textbox = GuiTextBox(textbox_bounds, textbox_text, textbox_length, textbox_editmode);
-
-    if (action_button == 1) { printf("Button 2 pressed\n"); } // button
-
-    if (action_textbox == 1) { // 1 means text was entered
-        printf("Textbox content: %s\n", textbox_text);
-        textbox_editmode = !textbox_editmode;
-    }
-
-    if (action_textbox == 2) { // 2 means text was unfocused
-        printf("Textbox content: %s\n", textbox_text);
-        textbox_editmode = !textbox_editmode;
-    }
-
-    if (state.messageWindowActive) GuiDiaConfirm( &state);
+    gui.draw();
 }
