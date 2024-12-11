@@ -36,7 +36,7 @@ class rlBase {
         
         virtual ~rlBase() {}
 
-        virtual int draw() { return 0; }
+        virtual int draw(float off_x, float off_y) { return 0; }
         
         void set(float x, float y, float w, float h, const char *text) {
             this->x = x;
@@ -64,9 +64,9 @@ class rlButton : public rlBase {
         rlButton(float x, float y, float w, float h, const char *text) 
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
+        int draw(float off_x, float off_y) override {
             //printf("DRAW rlButton: %f %f %f %f %s\n", x, y, w, h, text);
-            return GuiButton(Rectangle{ x, y, w, h }, text);
+            return GuiButton(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 
     private:
@@ -77,8 +77,8 @@ class rlLabel : public virtual rlBase {
         rlLabel(float x, float y, float w, float h, const char *text) 
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
-            return GuiLabel(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiLabel(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 
     private:
@@ -92,8 +92,8 @@ class rlTextBox : public virtual rlBase {
         int text_size = 12;
         bool edit_mode = false;
 
-        int draw() override {
-            return GuiTextBox({ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiTextBox({ x + off_x, y + off_y, w, h }, 
                 (char *)text, text_size, edit_mode);
         }
 };
@@ -103,8 +103,8 @@ class rlWindow : public virtual rlBase {
         rlWindow(float x, float y, float w, float h, const char *text)
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
-            return GuiWindowBox(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiWindowBox(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 };
 
@@ -113,8 +113,8 @@ class rlGroupBox : public virtual rlBase {
         rlGroupBox(float x, float y, float w, float h, const char *text)
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
-            return GuiGroupBox(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiGroupBox(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 };
 
@@ -123,8 +123,8 @@ class rlLine : public virtual rlBase {
         rlLine(float x, float y, float w, float h, const char *text)
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
-            return GuiLine(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiLine(Rectangle{ x + off_x, y + off_y, w, h }, text);
     }
 };
 
@@ -133,8 +133,8 @@ class rlPanel : public virtual rlBase {
         rlPanel(float x, float y, float w, float h, const char *text)
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
-            return GuiPanel(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiPanel(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 };
 
@@ -147,11 +147,11 @@ class rlTabBar : public virtual rlBase {
         rlTabBar(float x, float y, float w, float h, std::vector<std::string> tabs)
             : rlBase(x, y, w, h, ""), tabs(tabs) {}
 
-        int draw() override {
+        int draw(float off_x, float off_y) override {
             const char **tabNames = (const char **)tabs.data();
             int tabCount = (int)tabs.size();
 
-            return GuiTabBar(Rectangle{ x, y, w, h }, 
+            return GuiTabBar(Rectangle{ x + off_x, y + off_y, w, h }, 
                 tabNames, tabCount, &active);
         }
 };
@@ -165,8 +165,8 @@ class rlScrollPanel : public virtual rlBase {
         rlScrollPanel(float x, float y, float w, float h, Rectangle content, Vector2 scroll, Rectangle view)
             : rlBase(x, y, w, h, ""), content(content), scroll(scroll), view(view) {}
         
-        int draw() override {
-            return GuiScrollPanel(Rectangle{ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiScrollPanel(Rectangle{ x + off_x, y + off_y, w, h }, 
                 text, content, &scroll, &view);
         }
 };
@@ -176,8 +176,8 @@ class rlLabelButton : public virtual rlBase {
         rlLabelButton(float x, float y, float w, float h, const char *text) 
             : rlBase(x, y, w, h, text) {}
 
-        int draw() override {
-            return GuiLabelButton(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiLabelButton(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 };
 
@@ -188,8 +188,8 @@ class rlToggle : public virtual rlBase {
 
         bool active = false;
 
-        int draw() override {
-            return GuiToggle(Rectangle{ x, y, w, h }, text, &active);
+        int draw(float off_x, float off_y) override {
+            return GuiToggle(Rectangle{ x + off_x, y + off_y, w, h }, text, &active);
         }
 };
 
@@ -200,8 +200,8 @@ class rlToggleGroup : public virtual rlBase {
         rlToggleGroup(float x, float y, float w, float h, const char *text, int active)
             : rlBase(x, y, w, h, text), active(active) {}
 
-        int draw() override {
-            return GuiToggleGroup(Rectangle{ x, y, w, h }, text, &active);
+        int draw(float off_x, float off_y) override {
+            return GuiToggleGroup(Rectangle{ x + off_x, y + off_y, w, h }, text, &active);
         }
 };
 
@@ -212,8 +212,8 @@ class rlToggleSlider : public virtual rlBase {
         rlToggleSlider(float x, float y, float w, float h, const char *text, int active)
             : rlBase(x, y, w, h, text), active(active) {}
 
-        int draw() override {
-            return GuiToggleSlider(Rectangle{ x, y, w, h }, text, &active);
+        int draw(float off_x, float off_y) override {
+            return GuiToggleSlider(Rectangle{ x + off_x, y + off_y, w, h }, text, &active);
         }
 };
 
@@ -224,8 +224,8 @@ class rlCheckBox : public virtual rlBase {
         rlCheckBox(float x, float y, float w, float h, const char *text, bool checked)
             : rlBase(x, y, w, h, text), checked(checked) {}
 
-        int draw() override {
-            return GuiCheckBox(Rectangle{ x, y, w, h }, text, &checked);
+        int draw(float off_x, float off_y) override {
+            return GuiCheckBox(Rectangle{ x + off_x, y + off_y, w, h }, text, &checked);
         }
 };
 
@@ -236,8 +236,8 @@ class rlComboBox : public virtual rlBase {
         rlComboBox(float x, float y, float w, float h, const char *text, int active)
             : rlBase(x, y, w, h, text), active(active) {}
 
-        int draw() override {
-            return GuiComboBox(Rectangle{ x, y, w, h }, text, &active);
+        int draw(float off_x, float off_y) override {
+            return GuiComboBox(Rectangle{ x + off_x, y + off_y, w, h }, text, &active);
         }
 };
 
@@ -251,8 +251,8 @@ class rlSpinner : public virtual rlBase {
         rlSpinner(float x, float y, float w, float h, const char *text, int value, int min, int max, bool edit_mode)
             : rlBase(x, y, w, h, text), value(value), min(min), max(max), edit_mode(edit_mode) {}
 
-        int draw() override {
-            return GuiSpinner(Rectangle{ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiSpinner(Rectangle{ x + off_x, y + off_y, w, h }, 
             text, &value, min, max, edit_mode);
         }
 };
@@ -267,8 +267,8 @@ class rlValueBox : public virtual rlBase {
         rlValueBox(float x, float y, float w, float h, const char *text, int value, int min, int max, bool edit_mode)
             : rlBase(x, y, w, h, text), value(value), min(min), max(max), edit_mode(edit_mode) {}
 
-        int draw() override {
-            return GuiValueBox(Rectangle{ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiValueBox(Rectangle{ x + off_x, y + off_y, w, h }, 
                 text, &value, min, max, edit_mode);
         }
 };
@@ -282,8 +282,8 @@ class rlValueBoxFloat : public virtual rlBase {
         rlValueBoxFloat(float x, float y, float w, float h, const char *text, float value, bool edit_mode)
             : rlBase(x, y, w, h, text), value(value), edit_mode(edit_mode) {}
 
-        int draw() override {
-            return GuiValueBoxFloat(Rectangle{ x, y, w, h }, text,
+        int draw(float off_x, float off_y) override {
+            return GuiValueBoxFloat(Rectangle{ x + off_x, y + off_y, w, h }, text,
                 out_value, &value, edit_mode);
         }
 };
@@ -298,8 +298,8 @@ class rlSlider : public virtual rlBase {
         rlSlider(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
             : rlBase(x, y, w, h, textLeft), textLeft(textLeft), textRight(textRight), value(value), min(min), max(max) {}
 
-        int draw() override {
-            return GuiSlider(Rectangle{ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiSlider(Rectangle{ x + off_x, y + off_y, w, h }, 
                 textLeft, textRight, &value, min, max);
         }
 };
@@ -314,8 +314,8 @@ class rlSliderBar : public virtual rlBase {
         rlSliderBar(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
             : rlBase(x, y, w, h, textLeft), textLeft(textLeft), textRight(textRight), value(value), min(min), max(max) {}
 
-        int draw() override {
-            return GuiSliderBar(Rectangle{ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiSliderBar(Rectangle{ x + off_x, y + off_y, w, h }, 
                 textLeft, textRight, &value, min, max);
         }
 };
@@ -330,23 +330,23 @@ class rlProgressBar : public virtual rlBase {
         rlProgressBar(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
             : rlBase(x, y, w, h, textLeft), textLeft(textLeft), textRight(textRight), value(value), min(min), max(max) {}
 
-        int draw() override {
-            return GuiProgressBar(Rectangle{ x, y, w, h }, 
+        int draw(float off_x, float off_y) override {
+            return GuiProgressBar(Rectangle{ x + off_x, y + off_y, w, h }, 
                 textLeft, textRight, &value, min, max);
         }
 };
 
 class rlStatusBar : public virtual rlBase {
     public:
-        int draw() override {
-            return GuiStatusBar(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiStatusBar(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 };
 
 class rlDummyRec : public virtual rlBase {
     public:
-        int draw() override {
-            return GuiDummyRec(Rectangle{ x, y, w, h }, text);
+        int draw(float off_x, float off_y) override {
+            return GuiDummyRec(Rectangle{ x + off_x, y + off_y, w, h }, text);
         }
 };
 
@@ -359,8 +359,8 @@ class rlGrid : public virtual rlBase {
         rlGrid(float x, float y, float w, float h, const char *text, float spacing, int sub_divs, Vector2 *mouse_cell)
             : rlBase(x, y, w, h, text), spacing(spacing), sub_divs(sub_divs), mouse_cell(mouse_cell) {}
 
-        int draw() override {
-            return GuiGrid(Rectangle{ x, y, w, h }, text, spacing, sub_divs, mouse_cell);
+        int draw(float off_x, float off_y) override {
+            return GuiGrid(Rectangle{ x + off_x, y + off_y, w, h }, text, spacing, sub_divs, mouse_cell);
         }
 };
 
@@ -372,8 +372,8 @@ class rlListView : public virtual rlBase {
         rlListView(float x, float y, float w, float h, const char *text, int scroll_index, int active)
             : rlBase(x, y, w, h, text), scroll_index(scroll_index), active(active) {}
 
-        int draw() override {
-            return GuiListView(Rectangle{ x, y, w, h }, text, &scroll_index, &active);
+        int draw(float off_x, float off_y) override {
+            return GuiListView(Rectangle{ x + off_x, y + off_y, w, h }, text, &scroll_index, &active);
         }
 };
 
@@ -388,8 +388,8 @@ class rlListViewEx : public virtual rlBase {
         rlListViewEx(float x, float y, float w, float h, const char **items, int item_count, int scroll_index, int active, int focused)
             : rlBase(x, y, w, h, ""), items(items), item_count(item_count), scroll_index(scroll_index), active(active), focused(focused) {}
 
-        int draw() override {
-            return GuiListViewEx(Rectangle{ x, y, w, h }, items, item_count, &scroll_index, &active, &focused);
+        int draw(float off_x, float off_y) override {
+            return GuiListViewEx(Rectangle{ x + off_x, y + off_y, w, h }, items, item_count, &scroll_index, &active, &focused);
         }
 };
 
@@ -401,8 +401,8 @@ class rlMessageBox : public virtual rlBase {
         rlMessageBox(float x, float y, float w, float h, const char *title, const char *message, const char *buttons)
             : rlBase(x, y, w, h, title), message(message), buttons(buttons) {}
 
-        int draw() override {
-            return GuiMessageBox(Rectangle{ x, y, w, h }, text, message, buttons);
+        int draw(float off_x, float off_y) override {
+            return GuiMessageBox(Rectangle{ x + off_x, y + off_y, w, h }, text, message, buttons);
         }
 };
 
@@ -417,8 +417,8 @@ class rlTextInputBox : public virtual rlBase {
         rlTextInputBox(float x, float y, float w, float h, const char *title, const char *message, const char *buttons, char *text_message, int text_max_size, bool secret_view_active)
             : rlBase(x, y, w, h, title), message(message), buttons(buttons), text_message(text_message), text_max_size(text_max_size), secret_view_active(secret_view_active) {}
 
-        int draw() override {
-            return GuiTextInputBox(Rectangle{ x, y, w, h }, text, message, buttons, text_message, text_max_size, &secret_view_active);
+        int draw(float off_x, float off_y) override {
+            return GuiTextInputBox(Rectangle{ x + off_y, y + off_y, w, h }, text, message, buttons, text_message, text_max_size, &secret_view_active);
         }
 };
 
@@ -429,8 +429,8 @@ class rlColorPicker : public virtual rlBase {
         rlColorPicker(float x, float y, float w, float h, const char *text, Color color = RAYWHITE)
             : rlBase(x, y, w, h, text), color(color) {}
 
-        int draw() override {
-            return GuiColorPicker(Rectangle{ x, y, w, h }, text, &color);
+        int draw(float off_x, float off_y) override {
+            return GuiColorPicker(Rectangle{ x + off_x, y + off_y, w, h }, text, &color);
         }
 };
 
@@ -441,8 +441,8 @@ class rlColorPanel : public virtual rlBase {
         rlColorPanel(float x, float y, float w, float h, const char *text, Color *color)
             : rlBase(x, y, w, h, text), color(color) {}
         
-        int draw() override {
-            return GuiColorPanel(Rectangle{ x, y, w, h }, text, color);
+        int draw(float off_x, float off_y) override {
+            return GuiColorPanel(Rectangle{ x + off_x, y + off_y, w, h }, text, color);
         }
 };
 
@@ -453,8 +453,8 @@ class rlColorBarAlpha : public virtual rlBase {
         rlColorBarAlpha(float x, float y, float w, float h, const char *text, float alpha = 1.0f)
             : rlBase(x, y, w, h, text), alpha(alpha) {}
         
-        int draw() override {
-            return GuiColorBarAlpha(Rectangle{ x, y, w, h }, text, &alpha);
+        int draw(float off_x, float off_y) override {
+            return GuiColorBarAlpha(Rectangle{ x + off_x, y + off_y, w, h }, text, &alpha);
         }
 };
 
@@ -465,8 +465,8 @@ class rlColorBarHue : public virtual rlBase {
         rlColorBarHue(float x, float y, float w, float h, const char *text, float hue = 0.0f)
             : rlBase(x, y, w, h, text), hue(hue) {}
         
-        int draw() override {
-            return GuiColorBarHue(Rectangle{ x, y, w, h }, text, &hue);
+        int draw(float off_x, float off_y) override {
+            return GuiColorBarHue(Rectangle{ x + off_x, y + off_y, w, h }, text, &hue);
         }
 };
 
@@ -477,8 +477,8 @@ class rlColorPickerHSV : public virtual rlBase {
         rlColorPickerHSV(float x, float y, float w, float h, const char *text, Vector3 *color_hsv)
             : rlBase(x, y, w, h, text), color_hsv(color_hsv) {}
         
-        int draw() override {
-            return GuiColorPickerHSV(Rectangle{ x, y, w, h }, text, color_hsv);
+        int draw(float off_x, float off_y) override {
+            return GuiColorPickerHSV(Rectangle{ x + off_x, y + off_y, w, h }, text, color_hsv);
         }
 };
 
@@ -489,8 +489,8 @@ class rlColorPanelHSV : public virtual rlBase {
         rlColorPanelHSV(float x, float y, float w, float h, const char *text, Vector3 *color_hsv)
             : rlBase(x, y, w, h, text), color_hsv(color_hsv) {}
         
-        int draw() override {
-            return GuiColorPanelHSV(Rectangle{ x, y, w, h }, text, color_hsv);
+        int draw(float off_x, float off_y) override {
+            return GuiColorPanelHSV(Rectangle{ x + off_x, y + off_y, w, h }, text, color_hsv);
         }
 };
 
@@ -499,25 +499,98 @@ class rlGui {
         rlGui() {}
         ~rlGui() {}
 
-        float alpha = 1.0f;
-        //Font font = GetFontDefault();
-
         std::vector<std::pair<std::string, rlBase *>> elements;
 
-        void setAlpha(float alpha) {
-            this->alpha = alpha;
+        float off_x = 0, off_y = 0;
+
+        void setOffset(float x, float y) {
+            off_x = x;
+            off_y = y;
+        }
+
+        void offset_top_right() {
+            Rectangle pos = bounds();
+
+            off_x = GetScreenWidth() - pos.width;
+            off_y = 0;
+        }
+
+        void offset_bottom_left() {
+            Rectangle pos = bounds();
+
+            off_x = 0;
+            off_y = GetScreenHeight() - pos.height;
+        }
+
+        void offset_bottom_right() {
+            Rectangle pos = bounds();
+
+            off_x = GetScreenWidth() - pos.width;
+            off_y = GetScreenHeight() - pos.height;
+        }
+
+        void offset_center() {
+            Rectangle pos = bounds();
+
+            off_x = (GetScreenWidth() - pos.width) / 2;
+            off_y = (GetScreenHeight() - pos.height) / 2;
+        }
+
+        void offst_center_top() {
+            Rectangle pos = bounds();
+
+            off_x = (GetScreenWidth() - pos.width) / 2;
+            off_y = (GetScreenHeight() - pos.height) / 2;
+        }
+
+        void offset_left_center() {
+            Rectangle pos = bounds();
+
+            off_x = 0;
+            off_y = (GetScreenHeight() - pos.height) / 2;
+        }
+
+        void offset_right_center() {
+            Rectangle pos = bounds();
+
+            off_x = GetScreenWidth() - pos.width;
+            off_y = (GetScreenHeight() - pos.height) / 2;
+        }
+
+        void offset_bottom_center() {
+            Rectangle pos = bounds();
+
+            off_x = (GetScreenWidth() - pos.width) / 2;
+            off_y = GetScreenHeight() - pos.height;
         }
 
         void draw() {
-            //GuiSetFont(font);
+            // TODO: add offset
 
             for (auto &it : elements) {
-                it.second->result = it.second->draw();
+                it.second->result = it.second->draw(off_x, off_y);
             }
         };
 
         void add(std::string name,rlBase *element) {
             elements.push_back(std::make_pair(name, element));
+        }
+
+        Rectangle bounds() {
+            Rectangle bounds = { 0, 0, 0, 0 };
+
+            for (auto it : elements) {
+                if (it.second->x < bounds.x) bounds.x = it.second->x;
+                if (it.second->y < bounds.y) bounds.y = it.second->y;
+                if (it.second->x + it.second->w > bounds.width) bounds.width = it.second->x + it.second->w;
+                if (it.second->y + it.second->h > bounds.height) bounds.height = it.second->y + it.second->h;
+            }
+
+            // fix width and height
+            bounds.width = bounds.width - bounds.x;
+            bounds.height = bounds.height - bounds.y;
+
+            return bounds;
         }
 
     private:

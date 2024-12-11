@@ -73,14 +73,16 @@ void TestApp::start() {
     // now init my gui
     window_size = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 
-    GuiLoadStyle("./assets/dark.rgs");
+    GuiLoadStyle("./assets/terminal.rgs");
+
     gui.add("button", new rlButton(10, 10, 200, 50, "Just Click!"));
     gui.add("color", new rlColorPicker(10, 70, 200, 200, "Pick a color", GREEN));
     gui.add("progress", new rlProgressBar(10, 270, 200, 40, "Left", "Right", 0.5f, 0, 1));
-    //rlSliderBar(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
     gui.add("slider", new rlSliderBar(10, 320, 200, 40, "Left", "Right", 50.0f, 0, 100));
-    //rlSlider(float x, float y, float w, float h, const char *textLeft, const char *textRight, float value, float min, float max)
     gui.add("slider2", new rlSlider(10, 370, 200, 40, "Left", "Right", 50.0f, 0, 100));
+    
+    gui.offset_center();
+
     // ah feck it, let's get started
     music.play("intro");
 
