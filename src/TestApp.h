@@ -24,7 +24,7 @@ class TestApp {
         rlMaterial material; // Material handler
         rlModelAnimation animation; // Animation handler
 
-        Vector2 window_size = { 0, 0 };
+        //Vector2 window_size = { 0, 0 };
 
         ASSET_FILES default_textures = {
             { "ea", "./assets/easkit.png" }

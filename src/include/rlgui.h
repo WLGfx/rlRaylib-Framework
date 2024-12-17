@@ -138,7 +138,7 @@ class rlPanel : public virtual rlBase {
         }
 };
 
-class rlTabBar : public virtual rlBase {
+/*class rlTabBar : public virtual rlBase {
     public:
         std::vector<std::string> tabs;
 
@@ -154,7 +154,7 @@ class rlTabBar : public virtual rlBase {
             return GuiTabBar(Rectangle{ x + off_x, y + off_y, w, h }, 
                 tabNames, tabCount, &active);
         }
-};
+};*/
 
 class rlScrollPanel : public virtual rlBase {
     public:
@@ -229,7 +229,7 @@ class rlCheckBox : public virtual rlBase {
         }
 };
 
-class rlComboBox : public virtual rlBase {
+/*class rlComboBox : public virtual rlBase {
     public:
         int active = 1;
 
@@ -239,7 +239,7 @@ class rlComboBox : public virtual rlBase {
         int draw(float off_x, float off_y) override {
             return GuiComboBox(Rectangle{ x + off_x, y + off_y, w, h }, text, &active);
         }
-};
+};*/
 
 class rlSpinner : public virtual rlBase {
     public:
@@ -364,6 +364,7 @@ class rlGrid : public virtual rlBase {
         }
 };
 
+/* Removed temporarily until these can be implemented to handle andvanced gui elements
 class rlListView : public virtual rlBase {
     public:
         int scroll_index = 0;
@@ -375,9 +376,9 @@ class rlListView : public virtual rlBase {
         int draw(float off_x, float off_y) override {
             return GuiListView(Rectangle{ x + off_x, y + off_y, w, h }, text, &scroll_index, &active);
         }
-};
+};*/
 
-class rlListViewEx : public virtual rlBase {
+/*class rlListViewEx : public virtual rlBase {
     public:
         const char **items;
         int item_count = 0;
@@ -391,9 +392,9 @@ class rlListViewEx : public virtual rlBase {
         int draw(float off_x, float off_y) override {
             return GuiListViewEx(Rectangle{ x + off_x, y + off_y, w, h }, items, item_count, &scroll_index, &active, &focused);
         }
-};
+};*/
 
-class rlMessageBox : public virtual rlBase {
+/*class rlMessageBox : public virtual rlBase {
     public:
         const char *message;
         const char *buttons;
@@ -421,6 +422,7 @@ class rlTextInputBox : public virtual rlBase {
             return GuiTextInputBox(Rectangle{ x + off_y, y + off_y, w, h }, text, message, buttons, text_message, text_max_size, &secret_view_active);
         }
 };
+*/
 
 class rlColorPicker : public virtual rlBase {
     public:
@@ -499,7 +501,18 @@ class rlGui {
         rlGui() {}
         ~rlGui() {}
 
+        void init() {
+            monitor = GetCurrentMonitor();
+            width = GetMonitorWidth(monitor);
+            height = GetMonitorHeight(monitor);
+            //width = GetScreenWidth();
+            //height = GetScreenHeight();
+        }
+
         std::vector<std::pair<std::string, rlBase *>> elements;
+
+        int monitor;
+        float width, height;
 
         float off_x = 0, off_y = 0;
 
@@ -508,10 +521,12 @@ class rlGui {
             off_y = y;
         }
 
+        // helper funtions to position gui on display
+        // all gui's elements should be offset from 0, 0
         void offset_top_right() {
             Rectangle pos = bounds();
 
-            off_x = GetScreenWidth() - pos.width;
+            off_x = width - pos.width;
             off_y = 0;
         }
 
@@ -519,54 +534,53 @@ class rlGui {
             Rectangle pos = bounds();
 
             off_x = 0;
-            off_y = GetScreenHeight() - pos.height;
+            off_y = height - pos.height;
         }
 
         void offset_bottom_right() {
             Rectangle pos = bounds();
 
-            off_x = GetScreenWidth() - pos.width;
-            off_y = GetScreenHeight() - pos.height;
+            off_x = width - pos.width;
+            off_y = height - pos.height;
         }
 
         void offset_center() {
             Rectangle pos = bounds();
 
-            off_x = (GetScreenWidth() - pos.width) / 2;
-            off_y = (GetScreenHeight() - pos.height) / 2;
+            off_x = (width - pos.width) / 2;
+            off_y = (height - pos.height) / 2;
         }
 
         void offst_center_top() {
             Rectangle pos = bounds();
 
-            off_x = (GetScreenWidth() - pos.width) / 2;
-            off_y = (GetScreenHeight() - pos.height) / 2;
+            off_x = (width - pos.width) / 2;
+            off_y = (height - pos.height) / 2;
         }
 
         void offset_left_center() {
             Rectangle pos = bounds();
 
             off_x = 0;
-            off_y = (GetScreenHeight() - pos.height) / 2;
+            off_y = (height - pos.height) / 2;
         }
 
         void offset_right_center() {
             Rectangle pos = bounds();
 
-            off_x = GetScreenWidth() - pos.width;
-            off_y = (GetScreenHeight() - pos.height) / 2;
+            off_x = width - pos.width;
+            off_y = (height - pos.height) / 2;
         }
 
         void offset_bottom_center() {
             Rectangle pos = bounds();
 
-            off_x = (GetScreenWidth() - pos.width) / 2;
-            off_y = GetScreenHeight() - pos.height;
+            off_x = (width - pos.width) / 2;
+            off_y = height - pos.height;
         }
 
+        // offset added
         void draw() {
-            // TODO: add offset
-
             for (auto &it : elements) {
                 it.second->result = it.second->draw(off_x, off_y);
             }

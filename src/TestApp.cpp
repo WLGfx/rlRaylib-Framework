@@ -25,8 +25,6 @@ int App::run(int argc, char **argv) {
     SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_FULLSCREEN_MODE);
     MaximizeWindow();
 
-    printf("Monitor: %d - Display: %d x %d, %d\n", monitor, (int)size.x, (int)size.y, c);
-
     TestApp test_app;
     test_app.start();
     
@@ -55,9 +53,10 @@ void TestApp::start() {
     model.load("rect", mesh.GenPlane("" , 4, 2, 2, 2));
     model.load("cube", mesh.GenCube("", 1, 1, 1));
 
-    // generate a checked material
+    // setup materials
     material.GenMaterialDefault("defmat");
     material.set_texture("defmat", MATERIAL_MAP_ALBEDO, texture.get("ea"));
+    
     image.gen_checked("check", 8, 8, 4, 4, DARKGRAY, LIGHTGRAY);
     texture.load("check", image.get("check"));
     image.unload( "check" ); // no need may as well clean it now
@@ -71,7 +70,7 @@ void TestApp::start() {
     sound.volume( "coin", 0.1f );
 
     // now init my gui
-    window_size = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+    //window_size = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 
     GuiLoadStyle("./assets/terminal.rgs");
 
@@ -81,14 +80,15 @@ void TestApp::start() {
     gui.add("slider", new rlSliderBar(10, 320, 200, 40, "Left", "Right", 50.0f, 0, 100));
     gui.add("slider2", new rlSlider(10, 370, 200, 40, "Left", "Right", 50.0f, 0, 100));
     
-    gui.offset_center();
+    gui.init();
+    gui.offset_left_center();
 
     // ah feck it, let's get started
     music.play("intro");
 
     while (!WindowShouldClose()) {
         update();
-        SwapScreenBuffer();
+        //SwapScreenBuffer(); // automaticly done by raylib
     }
 
     cleanup();
@@ -113,6 +113,11 @@ void TestApp::update() {
     if (IsKeyPressed(KEY_F)) {
         ToggleFullscreen();
     }
+
+    // update cameras x position using sin(delta)
+    float delta = GetTime() * 3.1410f;
+    camera.camera.position.x = -1.0f + (sin(delta) * 1.0f);
+    UpdateCamera(&camera.camera, CAMERA_PERSPECTIVE);
 }
 
 void TestApp::draw() {
@@ -131,4 +136,6 @@ void TestApp::draw() {
 
     // 2D and gui
     gui.draw();
+
+    DrawFPS(0, 0);
 }

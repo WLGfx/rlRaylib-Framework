@@ -13,3 +13,9 @@ TODO:
 1. add more gui functionality
 2. c++'ify some other sections
 3. test. test. test.
+
+# Dependencies
+
+1. raylib
+2. raygui
+3. glm
