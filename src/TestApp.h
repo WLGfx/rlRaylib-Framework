@@ -3,6 +3,8 @@
 
 #include "include/rl.h"
 
+#include "include/rlMeshInstance.h"
+
 class TestApp {
     public:
         void start();
@@ -65,6 +67,9 @@ class TestApp {
         float ea_angle = 60;
 
         rlGui gui;
+
+        //void init_multi_mesh();
+        //rlMeshInstance mesh_instance;
 };
 
 #endif

@@ -92,7 +92,7 @@ class rlMesh {
         return map;
     }
 
-    Mesh get(std::string name) { return mesh.find(name)->second; }
+    Mesh *get(std::string name) { return &mesh[name]; }
     
     bool has(std::string name) { return mesh.find(name) != mesh.end(); }
 

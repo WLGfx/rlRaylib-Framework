@@ -83,6 +83,8 @@ void TestApp::start() {
     gui.init();
     gui.offset_left_center();
 
+    //init_multi_mesh();
+
     // ah feck it, let's get started
     music.play("intro");
 
@@ -132,6 +134,8 @@ void TestApp::draw() {
     model.draw("rect", ea_transform.translation, (Vector3&)ea_transform.rotation, ea_angle, ea_transform.scale, RAYWHITE);
     model.draw("cube", {0, 1, 2}, 1, RAYWHITE);
 
+    //mesh_instance.draw();
+
     camera.end();
 
     // 2D and gui
@@ -139,3 +143,17 @@ void TestApp::draw() {
 
     DrawFPS(0, 0);
 }
+
+/*void TestApp::init_multi_mesh() {
+    mesh_instance.set_mesh(mesh.get("cube"));
+    mesh_instance.set_material(material.get("defmat2"));
+
+    mesh_instance.transform_pos_push({ -1, -1, -1 });
+    //mesh_instance.transform_pos_push({ -2, 0, -2 });
+    //mesh_instance.transform_pos_push({ -1, 0, -2 });
+    //mesh_instance.transform_pos_push({ 0, 0, -2 });
+    //mesh_instance.transform_pos_push({ 1, 0, -2 });
+    //mesh_instance.transform_pos_push({ 2, 0, -2 });
+    //mesh_instance.transform_pos_push({ 3, 0, -2 });
+}
+*/

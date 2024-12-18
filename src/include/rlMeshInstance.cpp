@@ -43,6 +43,15 @@ Rotate matrix = {
 };
 */
 
+void rlMeshInstance::transform_push(Matrix *trans) {
+    transform.push_back( {
+        trans->m0, trans->m4, trans->m8, trans->m12 ,
+        trans->m1, trans->m5, trans->m9, trans->m13 ,
+        trans->m2, trans->m6, trans->m10, trans->m14 ,
+        trans->m3, trans->m7, trans->m11, trans->m15 } 
+    );
+}
+
 void rlMeshInstance::transform_push(Vector3 pos, Vector3 scale) {
     transform.push_back({
          scale.x, 0, 0, pos.x ,
@@ -79,11 +88,4 @@ void rlMeshInstance::transform_set_scale(int index, Vector3 scale) {
     trans->m0 = scale.x;
     trans->m5 = scale.y;
     trans->m10 = scale.z;
-}
-
-void rlMeshInstance::draw() {
-    if (mesh == nullptr || material == nullptr) return;
-    if (transform.empty()) return;
-
-    DrawMeshInstanced(*mesh, *material, transform.data(), transform.size());
 }
