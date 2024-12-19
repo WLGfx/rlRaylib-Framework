@@ -49,7 +49,6 @@ INCLUDES	:= $(patsubst %,-I%, $(INCLUDEDIRS:%/=%))
 
 # define the C libs
 LIBS		:= $(patsubst %,-L%, $(LIBDIRS:%/=%))
-
 LIBS		+= -lraylib
 
 # define the C source files

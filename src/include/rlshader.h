@@ -12,7 +12,6 @@ class rlShader {
     ~rlShader() { unload(); }
 
     // add shader preloads file list
-    
 
     bool load(std::string name, const char *vspath, const char *fspath) {
         Shader in = LoadShader(vspath, fspath);

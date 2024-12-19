@@ -22,6 +22,7 @@ class rlMusic {
         }
         return true;
     }
+
     bool load(std::string name, std::string filepath, bool auto_play = false) {
         Music in = LoadMusicStream(filepath.c_str());
         if (!IsMusicValid(in)) return false;
@@ -29,7 +30,8 @@ class rlMusic {
         if (auto_play) PlayMusicStream(in);
         return true;
     }
-    Music get(std::string name) { return music.find(name)->second; }
+
+    Music *get(std::string name) { return &music.find(name)->second; }
     void unload(std::string name) {
         auto it = music.find(name);
         if (it != music.end()) {
@@ -37,6 +39,7 @@ class rlMusic {
             music.erase(it);
         }
     }
+    
     void unload() {
         for (auto &it : music) {
             UnloadMusicStream(it.second);

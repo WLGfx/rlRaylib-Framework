@@ -5,6 +5,8 @@
 #include "raymath.h"
 #include "rcamera.h"
 
+#include <string>
+
 class rlCamera {
     public:
         Camera3D camera = {
@@ -17,8 +19,17 @@ class rlCamera {
 
         rlCamera() {}
 
+        std::string str_pos() {
+            return "{ " + std::to_string(camera.position.x) 
+            + ", " + std::to_string(camera.position.y) 
+            + ", " + std::to_string(camera.position.z)
+            + " }";
+        }
+
         void begin() { BeginMode3D(camera); }
         void end() { EndMode3D(); }
+        void update(int mode = CAMERA_PERSPECTIVE) { 
+            UpdateCamera(&camera, mode); }
 
         Camera3D get() { return camera; }
 

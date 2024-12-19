@@ -6,6 +6,10 @@
 
 #include "raylib.h"
 
+#ifndef ASSET_FILES
+#define ASSET_FILES std::unordered_map<std::string, const char *>
+#endif
+
 class rlModel {
     public:
     rlModel() {}
@@ -13,6 +17,12 @@ class rlModel {
 
     bool valid(std::string name) {
         return IsModelValid(model[name]);
+    }
+
+    void load(ASSET_FILES files) {
+        for (auto it : files) {
+            model[it.first] = LoadModel(it.second);
+        }
     }
 
     Model load(std::string name, std::string filepath) {
@@ -27,7 +37,7 @@ class rlModel {
         return out;
     }
 
-    Model get( std::string name ) { return model.find(name)->second; }
+    Model *get( std::string name ) { return &model.find(name)->second; }
 
     void unload(std::string name) {
         UnloadModel(model[name]);
@@ -50,7 +60,7 @@ class rlModel {
     } 
 
     void set_text(std::string name, int mat, int type, Texture2D text) {
-        get( name ).materials[mat].maps[type].texture = text;
+        get( name )->materials[mat].maps[type].texture = text;
     }
 
     // Model drawing functions

@@ -19,3 +19,11 @@ TODO:
 1. raylib
 2. raygui
 3. glm
+
+# Models
+
+1. Load .gltf/.glb file with materials
+2. Load PBR shader
+3. Add lights
+4. Shadows???
+
