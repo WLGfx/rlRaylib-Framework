@@ -57,7 +57,11 @@ class rlModel {
 
     void set_mesh_material(std::string name, int mesh_id, int material_id) {
         SetModelMeshMaterial(&model[name], mesh_id, material_id);
-    } 
+    }
+
+    void set_shader(std::string name, int mat, Shader shader) {
+        get( name )->materials[mat].shader = shader;
+    }
 
     void set_text(std::string name, int mat, int type, Texture2D text) {
         get( name )->materials[mat].maps[type].texture = text;

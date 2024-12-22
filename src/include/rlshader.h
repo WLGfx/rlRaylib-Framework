@@ -5,11 +5,29 @@
 #include <unordered_map>
 
 #include "raylib.h"
+#include "rlights.h"
+
+#if defined(PLATFORM_DESKTOP)
+    #define GLSL_VERSION            330
+#else   // PLATFORM_ANDROID, PLATFORM_WEB
+    #define GLSL_VERSION            100
+#endif
 
 class rlShader {
     public:
     rlShader() {}
     ~rlShader() { unload(); }
+
+    bool load_basic_lighting(std::string name) {
+        Shader in = LoadShader(
+            TextFormat("./assets/shaders/glsl%i/lighting.vs", GLSL_VERSION),
+            TextFormat("./assets/shaders/glsl%i/lighting.fs", GLSL_VERSION)
+        );
+        shader[name] = in;
+        return IsShaderValid(in);
+    }
+
+    Shader *get(std::string name) { return &shader.find(name)->second; }
 
     // add shader preloads file list
 

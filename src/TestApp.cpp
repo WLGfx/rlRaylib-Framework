@@ -5,6 +5,9 @@
 #define RAYGUI_IMPLEMENTATION
 #include "include/raygui.h"
 
+#define RLIGHTS_IMPLEMENTATION
+#include "include/rlights.h"
+
 int App::run(int argc, char **argv) {
     (void)argc; (void)argv;
 
@@ -18,7 +21,7 @@ int App::run(int argc, char **argv) {
                      (float)GetMonitorHeight(monitor) };
 
     SetWindowMaxSize(size.x, size.y);
-    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_FULLSCREEN_MODE);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);// | FLAG_FULLSCREEN_MODE);
     MaximizeWindow();
 
     InitAudioDevice();
@@ -38,11 +41,19 @@ void TestApp::start() {
 }
 
 void TestApp::init() {
-    music.load(music_assets);           // music
+    font.load_default("default");
+    font.load("carbon", "./assets/carbon.ttf", 400, NULL, 0);
+    font.load("merchant", "./assets/Merchant Copy Doublesize.ttf", 32, NULL, 0);
+
+    std::string shaderName = "lights";
+
+    music.load(music_assets);               // music
     music.play("intro");
 
-    model.load(model_assets);           // model
-    Model *egypt = model.get("egypt");
+    shader.load_basic_lighting(shaderName);  // shader
+
+    model.load(model_assets);               // model
+    model.set_shader("egypt", 0, *shader.get(shaderName));
     
     camera.pos( {0, 4, 10} );
 }
@@ -59,20 +70,23 @@ void TestApp::draw() {
     BeginDrawing();
 
         camera.begin();
-
-        DrawGrid(20, 0.5f);
-
-        model.draw("egypt", 
-            {0, 0, 0}, 
-            1.0f, RAYWHITE);
-
+        {
+            DrawGrid(20, 0.5f);
+            DrawPlane({ 0, 0, 0 }, 
+                { 5,5 }, DARKGRAY);
+            model.draw("egypt", 
+                {0, 1, 0}, 
+                1.0f, RAYWHITE);
+        }
         camera.end();
 
         DrawFPS(0, 0);
 
         std::string cam_pos = "Camera position: " + camera.str_pos();
-        DrawText(cam_pos.c_str(), 0, 32, 
-            20, RAYWHITE);
+        font.draw("merchant", cam_pos.c_str(), 
+            {0, 32}, 20, 1, RAYWHITE);
+        font.draw("carbon", "WLGfx", 
+            {200, 800}, 400, 1, RAYWHITE);
 
     EndDrawing();
 }

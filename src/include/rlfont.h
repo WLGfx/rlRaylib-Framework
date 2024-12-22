@@ -11,19 +11,25 @@ class rlFont {
     rlFont() {}
     ~rlFont() { unload(); }
 
+    Font load_default(std::string name) {
+        Font out = GetFontDefault();
+        font[name] = out;
+        return out;
+    }
+
     Font load(std::string name, std::string filepath) {
         Font in = LoadFont(filepath.c_str());
         if (!IsFontValid(in)) return {};
         font[name] = in;
         return in;
     }
-    Font load(std::string name, char *fname, int fsize, int *codepoints, int codepointCount) {
+    Font load(std::string name, const char *fname, int fsize, int *codepoints, int codepointCount) {
         Font in = LoadFontEx(fname, fsize, codepoints, codepointCount);
         if (!IsFontValid(in)) return {};
         font[name] = in;
         return in;
     }
-    Font load(std::string name, Image image, Color key, int firstChar) {
+    /*Font load(std::string name, Image image, Color key, int firstChar) {
         Font in = LoadFontFromImage(image, key, firstChar);
         if (!IsFontValid(in)) return {};
         font[name] = in;
@@ -36,7 +42,7 @@ class rlFont {
         if (!IsFontValid(in)) return {};
         font[name] = in;
         return in;
-    }
+    }*/
     Font get(std::string name) { return font.find(name)->second; }
     void unload(std::string name) {
         auto it = font.find(name);
@@ -52,12 +58,6 @@ class rlFont {
         font.clear();
     }
 
-    Font get_default(std::string name) {
-        Font out = GetFontDefault();
-        font[name] = out;
-        return out;
-    }
-
     bool valid(std::string name) {
         return font.find(name) != font.end();
     }
@@ -70,7 +70,7 @@ class rlFont {
         return ExportFontAsCode(font[name], fname);
     }
 
-    void draw(std::string name, char *text, Vector2 pos, float fsize, 
+    void draw(std::string name, const char *text, Vector2 pos, float fsize, 
             float spacing, Color tint) {
         DrawTextEx(font[name], text, pos, fsize, spacing, tint);
     }

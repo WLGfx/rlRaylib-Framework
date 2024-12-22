@@ -10,9 +10,9 @@
 class rlCamera {
     public:
         Camera3D camera = {
-            Vector3{0, 0, 0},
-            Vector3{0, 0, 0},
-            Vector3{0, 1, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 1, 0},
             45.0,
             CAMERA_PERSPECTIVE
         };
