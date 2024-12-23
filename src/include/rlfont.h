@@ -23,8 +23,20 @@ class rlFont {
         font[name] = in;
         return in;
     }
-    Font load(std::string name, const char *fname, int fsize, int *codepoints, int codepointCount) {
+    Font load(std::string name, const char *fname, int fsize, 
+            int *codepoints = NULL, int codepointCount = 0) {
         Font in = LoadFontEx(fname, fsize, codepoints, codepointCount);
+        if (!IsFontValid(in)) return {};
+        font[name] = in;
+        return in;
+    }
+
+    // allows for multiple uses of a single font file in memory
+    // *file_type ie = ".ttf"
+    Font load(std::string name, const char *file_type, const unsigned char *data, int data_size, 
+            int font_size, int *code_points = NULL, int codepointCount = 0) {
+        Font in = LoadFontFromMemory(file_type, data, data_size, 
+            font_size, code_points, codepointCount);
         if (!IsFontValid(in)) return {};
         font[name] = in;
         return in;

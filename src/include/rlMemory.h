@@ -4,30 +4,36 @@
 #include "stdio.h"
 #include <unordered_map>
 #include <string>
+#include <utility>
 
 #ifndef ASSET_FILES
 #define ASSET_FILES std::unordered_map<std::string, const char *>
 #endif
 
+#define MEM_PAIR std::pair<void *, size_t>
+
 // A simple memory manager
+// now using std::pair to store size of allocated blocks
+// NOTE: This is a simple memory manager and should not be used for large allocations
 
 class rlMemory {
     public:
         rlMemory() {}
-        ~rlMemory() {}
+        ~rlMemory() { free(); } // clean up on destructor
 
         bool alloc(std::string name, size_t size) {
-            memory[name] = malloc(size);
-            return memory[name] != NULL;
+            memory[name] = MEM_PAIR(malloc(size), size);
+            return memory[name].first != NULL;
         }
 
         bool alloc(std::string name, size_t block_size, size_t block_count) {
-            memory[name] = malloc(block_size * block_count);
-            return memory[name] != NULL;
+            size_t total = block_size * block_count;
+            memory[name] = MEM_PAIR(malloc(total), total);
+            return memory[name].first != NULL;
         }
 
         void free(std::string name) {
-            void *ptr = memory[name];
+            void *ptr = memory[name].first;
             if (ptr != NULL) {
                 ::free(ptr);
                 memory.erase(name);
@@ -36,13 +42,17 @@ class rlMemory {
 
         void free() {
             for (auto &it : memory) {
-                ::free(it.second);
+                ::free(it.second.first);
             }
             memory.clear();
         }
 
         void *get(std::string name) {
-            return memory[name];
+            return memory[name].first;
+        }
+
+        size_t size(std::string name) {
+            return memory[name].second;
         }
 
         // should really go in a cpp file but keeping it header only for now
@@ -65,7 +75,7 @@ class rlMemory {
             // load data
             fread(data, 1, size, file);
             fclose(file);
-            memory[name] = data;
+            memory[name] = MEM_PAIR(data, size);
             return size;
         }
 
@@ -75,7 +85,7 @@ class rlMemory {
             }
         }
     
-    std::unordered_map<std::string, void *> memory;
+    std::unordered_map<std::string, MEM_PAIR> memory;
 };
 
 #endif
