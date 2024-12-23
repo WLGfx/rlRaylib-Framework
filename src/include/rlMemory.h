@@ -12,6 +12,17 @@
 
 #define MEM_PAIR std::pair<void *, size_t>
 
+enum MEM_ID {
+    MEM_ID_UNKNOWN = 0,
+    MEM_ID_TTF,
+    MEM_ID_OTF,
+    MEM_ID_PNG,
+    MEM_ID_JPG,
+    MEM_ID_SOUND,
+    MEM_ID_MUSIC,
+    
+};
+
 // A simple memory manager
 // now using std::pair to store size of allocated blocks
 // NOTE: This is a simple memory manager and should not be used for large allocations

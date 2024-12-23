@@ -17,6 +17,7 @@ class rlImage {
         image[name] = in;
         return true;
     }
+
     Image get(std::string name) { return image.find(name)->second; }
     
     void unload(std::string name) {
