@@ -60,6 +60,13 @@ class rlMusic {
         UpdateMusicStream(*current);
     }
 
+    void volume(std::string name, float volume) { SetMusicVolume(music[name], volume); }
+    void pitch(std::string name, float pitch) { SetMusicPitch(music[name], pitch); }
+    void pan(std::string name, float pan) { SetMusicPan(music[name], pan); }
+
+    float time_length(std::string name) { return GetMusicTimeLength(music[name]); }
+    float time_played(std::string name) { return GetMusicTimePlayed(music[name]); }
+
     private:
     std::unordered_map<std::string, Music> music;
     Music *current;
