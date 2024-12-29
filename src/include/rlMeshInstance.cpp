@@ -1,10 +1,10 @@
 #include "rlMeshInstance.h"
 #include <raylib.h>
 
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
+//#include <glm/glm.hpp>
+//#include <glm/ext.hpp>
 
-#include "FastNoiseLite.h"
+//#include "FastNoiseLite.h"
 
 /*
 Matrix = { // Column major, OpenGL style, right-handed

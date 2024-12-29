@@ -32,11 +32,13 @@ class TestApp {
 
         rlShader shader;
         Light light[MAX_LIGHTS] = { 
+            {
             LIGHT_POINT,
             true,
             { 0, 5, -5 },
             { 0, 0, 0 },
             RAYWHITE 
+            }
         };
 };
 
