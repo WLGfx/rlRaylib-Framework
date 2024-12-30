@@ -19,22 +19,28 @@ class rlModel {
         return IsModelValid(model[name]);
     }
 
-    void load(ASSET_FILES files) {
-        for (auto it : files) {
-            model[it.first] = LoadModel(it.second);
+    bool load_assets(ASSET_FILES assets) {
+        bool success = false;
+
+        for (auto it : assets) {
+            Model in = load(it.first, it.second);
+
+            if (!IsModelValid(in)) {
+                success = false;
+                unload(it.first);
+                printf("Failed to load %s\n", it.first.c_str());
+            }
         }
+
+        return success;
     }
 
     Model load(std::string name, std::string filepath) {
-        Model out = LoadModel(filepath.c_str());
-        model[name] = out;
-        return out;
+        return model[name] = LoadModel(filepath.c_str());
     }
 
     Model load(std::string name, Mesh mesh) {
-        Model out = LoadModelFromMesh(mesh);
-        model[name] = out;
-        return out;
+        return model[name] = LoadModelFromMesh(mesh);
     }
 
     Model *get( std::string name ) { return &model.find(name)->second; }

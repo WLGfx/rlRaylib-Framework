@@ -15,12 +15,22 @@ class rlMusic {
     rlMusic() {}
     ~rlMusic() { unload(); }
 
-    bool load(ASSET_FILES files) {
-        for (auto it : files) {
-            bool success = load(it.first, it.second);
-            if (!success) return false;
+    bool load_assets(ASSET_FILES assets, bool auto_play_first = false) {
+        bool success = false;
+
+        for (auto it : assets) {
+            if (!load(it.first, it.second)) {
+                success = false;
+                unload(it.first);
+                printf("Failed to load %s\n", it.first.c_str());
+            } // keeps others loaded
         }
-        return true;
+
+        if (auto_play_first && success && !music.empty()) {
+            PlayMusicStream(music.begin()->second);
+        }
+
+        return success;
     }
 
     bool load(std::string name, std::string filepath, bool auto_play = false) {

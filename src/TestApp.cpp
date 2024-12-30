@@ -1,5 +1,6 @@
 #include "TestApp.h"
 #include "include/rl.h"
+#include "include/rl/rlfont.h"
 #include <raylib.h>
 
 #define RAYGUI_IMPLEMENTATION
@@ -41,19 +42,33 @@ void TestApp::start() {
 }
 
 void TestApp::init() {
-    font.load_default("default");
-    font.load("carbon", "./assets/carbon.ttf", 200, NULL, 0);
-    font.load("merchant", "./assets/Merchant Copy Doublesize.ttf", 32, NULL, 0);
+    font.load_assets({ 
+        { "carbon", 
+                {"./assets/fnt/carbon.ttf", 200} 
+            },
+        { "merchant", 
+                {"./assets/fnt/Merchant Copy Doublesize.ttf", 32} 
+            }
+        } // note extra brackets
+    );
+
+    music.load_assets({
+        { "intro", "./assets/snd/timebug.mod" },
+       },
+       true // auto play first in list on success
+    );
+
+    //model.load(model_assets);               // model
+    model.load_assets(
+        { "egypt", 
+            "./assets/3d/egyptian/egyptian.glb" }
+    );
 
     std::string shaderName = "lights";
-
-    music.load(music_assets);               // music
-    music.play("intro");
-
     shader.load_basic_lighting(shaderName);  // shader
 
-    model.load(model_assets);               // model
-    model.set_shader("egypt", 0, *shader.get(shaderName));
+    model.set_shader("egypt", 0, 
+        shader.get(shaderName));
     
     camera.pos( {0, 4, 10} );
 }
@@ -72,8 +87,10 @@ void TestApp::draw() {
         camera.begin();
         {
             DrawGrid(20, 0.5f);
+
             DrawPlane({ 0, 0, 0 }, 
                 { 5,5 }, DARKGRAY);
+
             model.draw("egypt", 
                 {0, 1, 0}, 
                 1.0f, RAYWHITE);

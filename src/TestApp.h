@@ -25,12 +25,8 @@ class TestApp {
         rlCamera camera;
 
         rlMusic music;
-        ASSET_FILES music_assets = 
-        {   { "intro", "./assets/timebug.mod" },   };
         
         rlModel model;
-        ASSET_FILES model_assets = 
-        {   { "egypt", "./assets/egyptian/egyptian.glb" } };
 
         rlShader shader;
         Light light[MAX_LIGHTS] = { 

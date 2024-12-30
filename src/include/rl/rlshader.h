@@ -7,6 +7,8 @@
 #include "raylib.h"
 #include "../rlights.h"
 
+#define PLATFORM_DESKTOP
+
 #if defined(PLATFORM_DESKTOP)
     #define GLSL_VERSION            330
 #else   // PLATFORM_ANDROID, PLATFORM_WEB
@@ -27,7 +29,7 @@ class rlShader {
         return IsShaderValid(in);
     }
 
-    Shader *get(std::string name) { return &shader.find(name)->second; }
+    Shader &get(std::string name) { return shader[name]; }
 
     // add shader preloads file list
 

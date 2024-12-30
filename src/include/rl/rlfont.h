@@ -1,10 +1,16 @@
 #ifndef RLFONT_H
 #define RLFONT_H
 
+#include <cmath>
 #include <string>
 #include <unordered_map>
 
 #include "raylib.h"
+
+// FONT_ASSETS { 
+//     { name, { fname, fsize } },
+// };
+#define FONT_ASSETS std::unordered_map<std::string, std::pair<const char *, int>>
 
 class rlFont {
     public:
@@ -12,9 +18,31 @@ class rlFont {
     ~rlFont() { unload(); }
 
     Font load_default(std::string name) {
-        Font out = GetFontDefault();
-        font[name] = out;
-        return out;
+        return font[name] = GetFontDefault();
+    }
+
+    bool load_assets(FONT_ASSETS assets) {
+        bool success = true;
+
+        if (assets.empty()) {
+            font["default"] = GetFontDefault();
+        }
+
+        for (auto it : assets) {
+            Font in = load(it.first, it.second.first, it.second.second);
+            if (!IsFontValid(in)) {
+                success = false;
+                unload(it.first);
+                printf("Failed to load %s\n", it.first.c_str());
+            }
+        }
+
+        if (!success) {
+            unload();
+            puts("Failed to load font assets");
+        }
+        
+        return success;
     }
 
     Font load(std::string name, std::string filepath) {
