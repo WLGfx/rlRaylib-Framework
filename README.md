@@ -18,7 +18,7 @@ TODO:
 
 1. raylib
 2. raygui
-3. glm
+3. glm (removed for raymath)
 
 # Models
 
@@ -27,3 +27,7 @@ TODO:
 3. Add lights
 4. Shadows???
 
+# Other
+
+1. GetScreenWidth() and ..Height() updated each frame on resize.
+2. Now only need clang++ or g++ and raylib 5.5+.

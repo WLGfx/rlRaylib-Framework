@@ -3,4 +3,5 @@
 make clean
 clear
 make -j4
-./output/main "$@"
+mv output/main ./rl-linux_build
+./rl-linux_build "$@"

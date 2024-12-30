@@ -1,12 +1,14 @@
 #ifndef TESTAPP_H
 #define TESTAPP_H
 
-#include "include/rlcamera.h"
-#include "include/rlfont.h"
-#include "include/rlmodel.h"
-#include "include/rlmusic.h"
-#include "include/rlshader.h"
-#include "include/rltexture.h"
+#include "include/rl/rlassets.h"
+#include "include/rl/rlfont.h"
+#include "include/rl/rlmodel.h"
+#include "include/rl/rlmusic.h"
+#include "include/rl/rlshader.h"
+#include "include/rl/rltexture.h"
+#include "include/rl/rlcamera.h"
+
 #include "include/rlights.h"
 
 class TestApp {

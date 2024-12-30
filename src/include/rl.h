@@ -5,18 +5,18 @@
 #define ASSET_FILES std::unordered_map<std::string, const char *>
 #endif
 
-#include "rltexture.h"
-#include "rlsound.h"
-#include "rlmusic.h"
-#include "rlfont.h"
-#include "rlimage.h"
-#include "rlshader.h"
-#include "rlmodel.h"
-#include "rlmesh.h"
-#include "rlmaterial.h"
-#include "rlmodelanimation.h"
-#include "rlcamera.h"
-#include "rlgui.h"
+#include "rl/rltexture.h"
+#include "rl/rlsound.h"
+#include "rl/rlmusic.h"
+#include "rl/rlfont.h"
+#include "rl/rlimage.h"
+#include "rl/rlshader.h"
+#include "rl/rlmodel.h"
+#include "rl/rlmesh.h"
+#include "rl/rlmaterial.h"
+#include "rl/rlmodelanimation.h"
+#include "rl/rlcamera.h"
+#include "rl/rlgui.h"
 
 class App {
 public:

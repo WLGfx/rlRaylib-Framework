@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include "raylib.h"
-#include "rlights.h"
+#include "../rlights.h"
 
 #if defined(PLATFORM_DESKTOP)
     #define GLSL_VERSION            330

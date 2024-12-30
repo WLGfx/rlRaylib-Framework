@@ -2,7 +2,7 @@
 #define RLGUI_H
 
 #include "raylib.h"
-#include "raygui.h"
+#include "../raygui.h"
 
 #include <string>
 #include <unordered_map>

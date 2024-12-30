@@ -1,7 +1,7 @@
 #ifndef RLMESHINSTANCE_H
 #define RLMESHINSTANCE_H
 
-#include "rl.h"
+#include "../rl.h"
 #include "rlmaterial.h"
 #include <raylib.h>
 #include <vector>

@@ -42,7 +42,7 @@ void TestApp::start() {
 
 void TestApp::init() {
     font.load_default("default");
-    font.load("carbon", "./assets/carbon.ttf", 400, NULL, 0);
+    font.load("carbon", "./assets/carbon.ttf", 200, NULL, 0);
     font.load("merchant", "./assets/Merchant Copy Doublesize.ttf", 32, NULL, 0);
 
     std::string shaderName = "lights";
@@ -85,8 +85,15 @@ void TestApp::draw() {
         std::string cam_pos = "Camera position: " + camera.str_pos();
         font.draw("merchant", cam_pos.c_str(), 
             {0, 32}, 20, 1, RAYWHITE);
+        
         font.draw("carbon", "WLGfx", 
             {200, 800}, 400, 1, RAYWHITE);
+
+        std::string screen_size = "Screen size: " + 
+            std::to_string(GetScreenWidth()) + 
+            "x" + std::to_string(GetScreenHeight());
+        font.draw("merchant", screen_size.c_str(), 
+            {0, 64}, 20, 1, RAYWHITE);
 
     EndDrawing();
 }
