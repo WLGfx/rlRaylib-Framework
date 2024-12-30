@@ -44,7 +44,7 @@ void TestApp::start() {
 void TestApp::init() {
     font.load_assets({ 
         { "carbon", 
-                {"./assets/fnt/carbon.ttf", 200} 
+                {"./assets/fnt/carbon.ttf", 100} 
             },
         { "merchant", 
                 {"./assets/fnt/Merchant Copy Doublesize.ttf", 32} 
@@ -55,22 +55,27 @@ void TestApp::init() {
     music.load_assets({
         { "intro", "./assets/snd/timebug.mod" },
        },
-       true // auto play first in list on success
+       false // auto play first in list on success
     );
 
-    //model.load(model_assets);               // model
-    model.load_assets(
+    model.load_assets( {
         { "egypt", 
-            "./assets/3d/egyptian/egyptian.glb" }
-    );
+            "./assets/3d/egypt/egyptian.glb" }
+    } );
 
-    std::string shaderName = "lights";
-    shader.load_basic_lighting(shaderName);  // shader
-
-    model.set_shader("egypt", 0, 
-        shader.get(shaderName));
+    shader.load_basic_lighting("lights");
+    light[0] = CreateLight(LIGHT_POINT, 
+        {-5, 5, -5}, 
+        {0, 0, 0}, 
+        DARKGREEN, 
+        shader.get("lights"));
     
+    
+    model.set_shader("egypt", 0, shader.get("lights"));
+
     camera.pos( {0, 4, 10} );
+
+    music.play("intro");
 }
 
 void TestApp::update() {
@@ -88,12 +93,16 @@ void TestApp::draw() {
         {
             DrawGrid(20, 0.5f);
 
-            DrawPlane({ 0, 0, 0 }, 
-                { 5,5 }, DARKGRAY);
+            BeginShaderMode(shader.get("lights"));
+            {
+                DrawPlane({ 0, 0, 0 }, 
+                    { 5,5 }, DARKGRAY);
 
-            model.draw("egypt", 
-                {0, 1, 0}, 
-                1.0f, RAYWHITE);
+                model.draw("egypt", 
+                    {0, 1, 0}, 
+                    1.0f, RAYWHITE);
+            }
+            EndShaderMode();
         }
         camera.end();
 

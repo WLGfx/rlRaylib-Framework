@@ -6,76 +6,95 @@
 
 #include "raylib.h"
 
-#ifndef ASSET_FILES
-#define ASSET_FILES std::unordered_map<std::string, const char *>
+#ifndef MUSIC_ASSETS
+#define MUSIC_ASSETS std::unordered_map<std::string, const char *>
 #endif
 
 class rlMusic {
+
+    class Asset {
+    public:
+        Music music;
+        bool playing = false;
+    };
+
+    private:
+    std::unordered_map<std::string, Asset> music;
+
     public:
     rlMusic() {}
     ~rlMusic() { unload(); }
 
-    bool load_assets(ASSET_FILES assets, bool auto_play_first = false) {
-        bool success = false;
+    bool load_assets(MUSIC_ASSETS assets, bool auto_play_first = false) {
+        bool success = true;
 
-        for (auto it : assets) {
-            if (!load(it.first, it.second)) {
+        for (auto asset : assets) {
+            if (!load(asset.first, asset.second)) {
                 success = false;
-                unload(it.first);
-                printf("Failed to load %s\n", it.first.c_str());
-            } // keeps others loaded
+            }
         }
 
         if (auto_play_first && success && !music.empty()) {
-            PlayMusicStream(music.begin()->second);
+            PlayMusicStream(music[0].music);
+            music[0].playing = true;
+        } else {
+            printf("ERROR * * * Failed to load music assets\n");
+            unload();
         }
 
         return success;
     }
 
     bool load(std::string name, std::string filepath, bool auto_play = false) {
-        Music in = LoadMusicStream(filepath.c_str());
-        if (!IsMusicValid(in)) return false;
-        music[name] = in;
-        if (auto_play) PlayMusicStream(in);
+        music[name].music = LoadMusicStream(filepath.c_str());
+        music[name].playing = false;
+
+        if (!IsMusicValid(music[name].music)) {
+            music.erase(name);
+            return false;
+        }
+
+        if (auto_play) {
+            PlayMusicStream(music[name].music);
+            music[name].playing = true;
+        }
+
         return true;
     }
 
-    Music *get(std::string name) { return &music.find(name)->second; }
+    /*Music *get(std::string name) { return &music.find(name)->second; }
     void unload(std::string name) {
         auto it = music.find(name);
         if (it != music.end()) {
             UnloadMusicStream(it->second);
             music.erase(it);
         }
-    }
+    }*/
     
     void unload() {
-        for (auto &it : music) {
-            UnloadMusicStream(it.second);
+        for (auto it : music) {
+            UnloadMusicStream(it.second.music);
         }
         music.clear();
     } 
 
     bool play(std::string name) {
-        auto it = music.find(name);
-        if (it == music.end()) {
-            current = nullptr;
-            return false;
+        if (IsMusicValid(music[name].music)) {
+            PlayMusicStream(music[name].music);
+            music[name].playing = true;
+            return true;
         }
-        PlayMusicStream(it->second);
-        current = &it->second;
-        return true;
+        return false;
     }
 
     void update() {
-        if (current == nullptr) return;
-        UpdateMusicStream(*current);
+        for (auto asset : music) {
+            if (asset.second.playing) {
+                UpdateMusicStream(asset.second.music);
+            }
+        }
     }
 
-    private:
-    std::unordered_map<std::string, Music> music;
-    Music *current;
 };
 
 #endif

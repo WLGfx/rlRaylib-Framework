@@ -7,13 +7,19 @@
 
 #include "raylib.h"
 
-// FONT_ASSETS { 
-//     { name, { fname, fsize } },
-// };
-#define FONT_ASSETS std::unordered_map<std::string, std::pair<const char *, int>>
+#define FONT_ASSETS std::unordered_map<std::string, Asset>
 
 class rlFont {
+    private:
+    std::unordered_map<std::string, Font> font;
+
     public:
+    class Asset {
+        public:
+        std::string fname;
+        int fsize;
+    };
+
     rlFont() {}
     ~rlFont() { unload(); }
 
@@ -29,11 +35,11 @@ class rlFont {
         }
 
         for (auto it : assets) {
-            Font in = load(it.first, it.second.first, it.second.second);
+            Font in = LoadFontEx(it.second.fname.c_str(), it.second.fsize, NULL, 0);
             if (!IsFontValid(in)) {
                 success = false;
                 unload(it.first);
-                printf("Failed to load %s\n", it.first.c_str());
+                printf("Failed to load %s\n", it.second.fname.c_str());
             }
         }
 
@@ -146,8 +152,7 @@ class rlFont {
         return out;
     }
 
-    private:
-    std::unordered_map<std::string, Font> font;
+   
 };
 
 #endif

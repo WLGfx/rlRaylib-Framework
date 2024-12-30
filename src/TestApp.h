@@ -21,23 +21,21 @@ class TestApp {
 
     private:
         rlFont font;
-
         rlCamera camera;
-
         rlMusic music;
-        
         rlModel model;
-
         rlShader shader;
-        Light light[MAX_LIGHTS] = { 
+
+        Light light[MAX_LIGHTS];
+        /* = { 
             {
             LIGHT_POINT,
             true,
-            { 0, 5, -5 },
+            { -5, 5, -5 },
             { 0, 0, 0 },
             RAYWHITE 
             }
-        };
+        };*/
 };
 
 #endif

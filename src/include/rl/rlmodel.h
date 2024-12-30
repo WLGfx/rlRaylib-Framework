@@ -6,8 +6,8 @@
 
 #include "raylib.h"
 
-#ifndef ASSET_FILES
-#define ASSET_FILES std::unordered_map<std::string, const char *>
+#ifndef MODEL_ASSET
+#define MODEL_ASSET std::unordered_map<std::string, const char *>
 #endif
 
 class rlModel {
@@ -19,16 +19,16 @@ class rlModel {
         return IsModelValid(model[name]);
     }
 
-    bool load_assets(ASSET_FILES assets) {
+    bool load_assets(MODEL_ASSET assets) {
         bool success = false;
 
         for (auto it : assets) {
-            Model in = load(it.first, it.second);
+            model[it.first] = LoadModel(it.second);
 
-            if (!IsModelValid(in)) {
+            if (!IsModelValid(model[it.first])) {
                 success = false;
                 unload(it.first);
-                printf("Failed to load %s\n", it.first.c_str());
+                printf("ERROR * * * Failed to load %s\n", it.second);
             }
         }
 
