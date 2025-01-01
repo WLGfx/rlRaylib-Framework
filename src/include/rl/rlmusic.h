@@ -35,9 +35,11 @@ class rlMusic {
         }
 
         if (auto_play_first && success && !music.empty()) {
-            PlayMusicStream(music[0].music);
+            PlayMusicStream(music.begin()->second.music);
             music[0].playing = true;
-        } else {
+        }
+        
+        if (!success) {
             printf("ERROR * * * Failed to load music assets\n");
             unload();
         }
@@ -62,8 +64,10 @@ class rlMusic {
         return true;
     }
 
-    /*Music *get(std::string name) { return &music.find(name)->second; }
-    void unload(std::string name) {
+    Music *get(std::string name) { 
+        return &music.find(name)->second.music; 
+    }
+    /*void unload(std::string name) {
         auto it = music.find(name);
         if (it != music.end()) {
             UnloadMusicStream(it->second);

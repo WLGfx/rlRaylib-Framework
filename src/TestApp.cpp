@@ -78,7 +78,7 @@ void TestApp::init() {
     light[0] = CreateLight(LIGHT_DIRECTIONAL, 
         {-15, 15, -15}, 
         {0, 0, 0}, 
-        GRAY, 
+        LIGHTGRAY, 
         shader.get("lights"));
     light[1] = CreateLight(LIGHT_POINT, 
         {10, 10, 10}, 
@@ -96,6 +96,12 @@ void TestApp::init() {
 
     model.set_shader("egypt", 
         0, shader.get("lights"));
+    model.set_shader("egypt", 
+        1, shader.get("lights"));
+    model.set_shader("egypt",
+        2, shader.get("lights"));
+    model.set_shader("egypt", 
+        3, shader.get("lights"));
     model.set_shader("plane", 
         0, shader.get("lights"));
     model.set_shader("cube",
