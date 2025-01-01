@@ -3,6 +3,7 @@
 
 #include "include/rl/rlassets.h"
 #include "include/rl/rlfont.h"
+#include "include/rl/rlmesh.h"
 #include "include/rl/rlmodel.h"
 #include "include/rl/rlmusic.h"
 #include "include/rl/rlshader.h"
@@ -26,16 +27,9 @@ class TestApp {
         rlModel model;
         rlShader shader;
 
+        rlMesh mesh; // for generating mesh models
+
         Light light[MAX_LIGHTS];
-        /* = { 
-            {
-            LIGHT_POINT,
-            true,
-            { -5, 5, -5 },
-            { 0, 0, 0 },
-            RAYWHITE 
-            }
-        };*/
 };
 
 #endif

@@ -58,22 +58,53 @@ void TestApp::init() {
        false // auto play first in list on success
     );
 
+    // generate all 3d models being used
     model.load_assets( {
         { "egypt", 
             "./assets/3d/egypt/egyptian.glb" }
     } );
+    model.load("plane",
+        mesh.GenPlane("", 
+        25, 25, 5, 5));
+    model.load("cube",
+        mesh.GenCube("", 
+        1, 1, 1));
+    model.load("sphere",
+        mesh.GenSphere("", 
+        1, 12, 12));
 
     shader.load_basic_lighting("lights");
-    light[0] = CreateLight(LIGHT_POINT, 
-        {-5, 5, -5}, 
+
+    light[0] = CreateLight(LIGHT_DIRECTIONAL, 
+        {-15, 15, -15}, 
         {0, 0, 0}, 
-        DARKGREEN, 
+        GRAY, 
         shader.get("lights"));
-    
-    
-    model.set_shader("egypt", 0, shader.get("lights"));
+    light[1] = CreateLight(LIGHT_POINT, 
+        {10, 10, 10}, 
+        {0, 0, 0}, 
+        DARKBLUE, 
+        shader.get("lights"));
+    light[2] = CreateLight(LIGHT_POINT, 
+        {-1, 3, -3}, 
+        {0, 0, 0}, 
+        DARKGREEN,
+        shader.get("lights"));
+    light[0].attenuation = 0.01f;
+    light[1].attenuation = 0.01f;
+    light[2].attenuation = 0.01f;
+
+    model.set_shader("egypt", 
+        0, shader.get("lights"));
+    model.set_shader("plane", 
+        0, shader.get("lights"));
+    model.set_shader("cube",
+        0, shader.get("lights"));
+    model.set_shader("sphere",
+        0, shader.get("lights"));
 
     camera.pos( {0, 4, 10} );
+    camera.at( {0, 1, 0} );
 
     music.play("intro");
 }
@@ -81,6 +112,7 @@ void TestApp::init() {
 void TestApp::update() {
     music.update();
     camera.update(CAMERA_ORBITAL);
+    UpdateLightValues(shader.get("lights"), light[0]);
 
     ClearBackground(DARKBROWN);
     draw();
@@ -93,16 +125,32 @@ void TestApp::draw() {
         {
             DrawGrid(20, 0.5f);
 
-            BeginShaderMode(shader.get("lights"));
+            //BeginShaderMode(shader.get("lights"));
             {
-                DrawPlane({ 0, 0, 0 }, 
-                    { 5,5 }, DARKGRAY);
+                model.draw("plane",
+                    {0, 0, 0},
+                    1,
+                    GRAY);
 
-                model.draw("egypt", 
-                    {0, 1, 0}, 
-                    1.0f, RAYWHITE);
+                model.draw("cube",
+                    {-2, 1, 0},
+                    1,
+                    RAYWHITE);
+                
+                model.draw("sphere",
+                    {2, 1, 0},
+                    1,
+                    RAYWHITE);
+                
+                model.draw("egypt", // name
+                    {0, 1, 0},      // position
+                    {0, 1, 0},      // rotation axis
+                    0,              // rotation angle
+                    {1, 1, 1},       // scale
+                    RAYWHITE
+                    );
             }
-            EndShaderMode();
+            //EndShaderMode();
         }
         camera.end();
 

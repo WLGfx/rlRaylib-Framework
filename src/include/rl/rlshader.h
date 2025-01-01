@@ -16,6 +16,9 @@
 #endif
 
 class rlShader {
+    private:
+    std::unordered_map<std::string, Shader> shader;
+    
     public:
     rlShader() {}
     ~rlShader() { unload(); }
@@ -34,15 +37,23 @@ class rlShader {
     // add shader preloads file list
 
     bool load(std::string name, const char *vspath, const char *fspath) {
-        Shader in = LoadShader(vspath, fspath);
-        if (!IsShaderValid(in)) return false;
-        shader[name] = in;
+        shader[name] = LoadShader(vspath, fspath);
+
+        if (!IsShaderValid(shader[name])){
+            unload(name);
+            return false;
+        }
+
         return true;
     }
     bool load_memory(std::string name, const char *vsCode, const char *fsCode) {
-        Shader in = LoadShaderFromMemory(vsCode, fsCode);
-        if (!IsShaderValid(in)) return false;
-        shader[name] = in;
+        shader[name] = LoadShaderFromMemory(vsCode, fsCode);
+
+        if (!IsShaderValid(shader[name])){
+            unload(name);
+            return false;
+        }
+
         return true;
     }
 
@@ -92,9 +103,6 @@ class rlShader {
     void set_texture(std::string name, int locIndex, Texture2D &texture) {
         SetShaderValueTexture(shader[name], locIndex, texture);
     }
-
-    private:
-    std::unordered_map<std::string, Shader> shader;
 };
 
 #endif
