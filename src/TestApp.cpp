@@ -102,6 +102,7 @@ void TestApp::init() {
         2, shader.get("lights"));
     model.set_shader("egypt", 
         3, shader.get("lights"));
+    
     model.set_shader("plane", 
         0, shader.get("lights"));
     model.set_shader("cube",
